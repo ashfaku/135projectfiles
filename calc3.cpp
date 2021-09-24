@@ -11,7 +11,8 @@ int main()
 	if (v == '^')
 		input *= input;
 	sum += input;
-	cin >> op;
+	if (v == '^')
+		cin >> op;
 	while (cin >> op)
 	{
 		if (op == ';')
