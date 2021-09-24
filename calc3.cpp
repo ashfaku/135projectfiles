@@ -18,8 +18,14 @@ int main()
 		if (op == ';')
 		{
 			cout << sum << endl;
+			sum = 0;
 			cin >> input;
-			sum = input;
+       			char v = cin.peek();
+       			if (v == '^')
+       			        input *= input;
+       			sum += input;
+      			if (v == '^')
+                		cin >> op;
 		}
 		else
 		{
