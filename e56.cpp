@@ -8,6 +8,6 @@ int main()
 {
 	std::string s;
 	cin >> s;
-	cout << (s.length() % 2 == 1 ? s.at(s.length() / 2) : s.at(s.length() / 2 - 1) + s.at(s.length() / 2)) << endl;
+	cout << (s.length() % 2 == 1 ? s.substr(s.length() / 2, 1) : s.substr(s.length() / 2 - 1, 2)) << endl;
 	return 0;
 }
