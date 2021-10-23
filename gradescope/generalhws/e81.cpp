@@ -1,19 +1,24 @@
-#include <fstream>
 #include <iostream>
+#include <fstream>
 
-int main() {
-  std::ofstream outputFile;
-  outputFile.open("hello.txt", std::ios::out);
-  outputFile << "Hello, World!";
-  outputFile.close();
+int main()
+{
+	std::ofstream outputFile;
+	outputFile.open("hello.txt", std::ios::out);
+	outputFile << "Hello, World!";
+	outputFile.close();
 
-  std::ifstream inputFile;
-  inputFile.open("hello.txt", std::ios::in);
-  std::string fileMessage = "";
-  char c = '\0';
-  while (inputFile.get(c))
-    fileMessage += c;
+	std::ifstream inputFile;
+	inputFile.open("hello.txt", std::ios::in);
+	std::string fileMessage = "";
+	char c = '\0';
+	while (inputFile.get(c))
+		fileMessage += c;
 
-  std::cout << fileMessage << std::endl;
-  return 0;
+	std::cout << fileMessage << std::endl;
+	return 0;
+
 }
+
+
+
