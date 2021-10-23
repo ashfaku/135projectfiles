@@ -4,18 +4,17 @@ Course: CSCI-136
 Instructor: Mike Zamansky
 Assignment: Lab4D
 
-This file defines the lowerhalf(int) function that returns a string that's the lower half of a square with an inputted dimension.
+This file defines the lowerhalf(int) function that returns a string that's the
+lower half of a square with an inputted dimension.
 */
-#include <iostream>
 #include "lower.h"
-std::string lowerhalf(int d)
-{
-	std::string l = "";
-	for (int i = 1; i <= d; i++)
-	{
-		for (int j = 0; j < i; j++)
-			l += "*";
-		l += i < d ? "\n" : "";
-	}
-	return l;
+#include <iostream>
+std::string lowerhalf(int d) {
+  std::string l = "";
+  for (int i = 1; i <= d; i++) {
+    for (int j = 0; j < i; j++)
+      l += "*";
+    l += i < d ? "\n" : "";
+  }
+  return l;
 }

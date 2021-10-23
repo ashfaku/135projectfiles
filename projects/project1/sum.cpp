@@ -8,11 +8,9 @@ Takes in a txt file with numbers and outputs their sum.
 
 #include <iostream>
 
-int main()
-{
-	int sum = 0, x;
-	while (std::cin >> x)
-		sum += x;
-	std::cout << sum << std::endl;
+int main() {
+  int sum = 0, x;
+  while (std::cin >> x)
+    sum += x;
+  std::cout << sum << std::endl;
 }
-
