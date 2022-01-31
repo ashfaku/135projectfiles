@@ -1,6 +1,7 @@
 #include "myvector.h"
 #include <iostream>
-
+using std::cout;
+using std::endl;
 template <class T>
 MyVector<T>::MyVector()
 {
@@ -67,17 +68,27 @@ void MyVector<T>::pop_back()
 template <class T>
 void MyVector<T>::pop_back(int n)
 {
+	cout << current << endl;
 	if (current > 0)
 	{
-		T* left = new T[n], right = new T[current - n - 1];
+		T* left = new T[n];
+		T* right = new T[current - n - 1];
+		for (int i = 0; i < n; i++)
+			left[i] = nums[i];
+		for (int i = n + 1; i < current; i++)
+			right[i - n - 1] = nums[i];
 		nums = new T[--current];
+		for (int i = 0; i < n; i++)
+			cout << left[i] << endl;
+		cout << "-----" << endl;
+		for (int i = 0; i < current - n; i++)
+			cout << right[i] << endl;
 		for (int i = 0; i < n; i++)
 			nums[i] = left[i];
 		for (int i = n; i < current; i++)
-			nums[i] = right[i];
+			nums[i] = right[i - n];
 	}
 }
-
 template <class T>
 void MyVector<T>::clear()
 {

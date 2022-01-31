@@ -13,6 +13,10 @@ class MyVector
 		void pop_back();
 		void clear();
 		void print();
+		T operator[] (int i)
+		{
+			return nums[i];
+		}
 	private:
 		int current, cap;
 		T* nums;
