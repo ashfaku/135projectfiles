@@ -13,7 +13,7 @@ class MyVector
 		void pop_back();
 		void clear();
 		void print();
-		T operator[] (int i)
+		T &operator[] (int i)
 		{
 			return nums[i];
 		}

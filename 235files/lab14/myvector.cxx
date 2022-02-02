@@ -22,7 +22,7 @@ int MyVector<T>::capacity()
 template <class T>
 bool MyVector<T>::empty()
 {
-	return size == 0;
+	return current == 0;
 }
 template <class T>
 void MyVector<T>::print()
@@ -40,9 +40,11 @@ void MyVector<T>::push_back(T i)
 		T* data = new T[current];
 		for (int i = 0; i < current; i++)
 			data[i] = nums[i];
+		delete[] nums;
 		nums = new T[cap];
 		for (int i = 0; i < current; i++)
 			nums[i] = data[i];
+		delete[] data;
 	}
 	nums[current++] = i;
 }
@@ -54,21 +56,23 @@ void MyVector<T>::pop_back()
 		T* data = new T[current];
 		for (int i = 0; i < current - 1; i++)
 			data[i] = nums[i];
+		delete[] nums;
 		nums = new T[--current];
 		for (int i = 0; i < current; i++)
 			nums[i] = data[i];
+		delete[] data;
 	}
 	else
 	{
 		current = 0;
 		cap = 5;
+		delete[] nums;
 		nums = new T[cap];
 	}
 }
 template <class T>
 void MyVector<T>::pop_back(int n)
 {
-	cout << current << endl;
 	if (current > 0)
 	{
 		T* left = new T[n];
@@ -77,16 +81,14 @@ void MyVector<T>::pop_back(int n)
 			left[i] = nums[i];
 		for (int i = n + 1; i < current; i++)
 			right[i - n - 1] = nums[i];
+		delete[] nums;
 		nums = new T[--current];
-		for (int i = 0; i < n; i++)
-			cout << left[i] << endl;
-		cout << "-----" << endl;
-		for (int i = 0; i < current - n; i++)
-			cout << right[i] << endl;
 		for (int i = 0; i < n; i++)
 			nums[i] = left[i];
 		for (int i = n; i < current; i++)
 			nums[i] = right[i - n];
+		delete[] left;
+		delete[] right;
 	}
 }
 template <class T>
@@ -94,5 +96,6 @@ void MyVector<T>::clear()
 {
 	current = 0;
 	cap = 5;
+	delete[] nums;
 	nums = new T[cap];
 }
