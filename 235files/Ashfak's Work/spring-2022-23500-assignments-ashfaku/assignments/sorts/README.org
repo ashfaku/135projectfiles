@@ -1,0 +1,4 @@
+Changing the function to be in place lowered the run time a lot, and changing the pivot placement seems to have an unpredictable effect on it. Most likely 
+why you mentioned how quick sort can vary in effectiveness. 
+
+Merge sort in general, was not only more intuitive, but also more efficient in the long run due to not depending on a lucky or unlucky pivot
