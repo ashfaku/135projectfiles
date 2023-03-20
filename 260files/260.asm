@@ -2,8 +2,8 @@
 # DONOTMODIFYTHISLINE
 frameBuffer: .space 0x80000 #512wideX256highpixels
 w: .word 180
-h: .word 20
-l: .word 70
+h: .word 50
+l: .word 50
 bgcol: .word 0x00FF0000
 # DONOTMODIFYTHISLINE
 # Your variables go BELOW here only (and above .text)
@@ -25,7 +25,9 @@ init:
 	addi $t3, $s0, -48  # t3 <- w - 48 
 	srl $t3, $t3, 1 # t3 <- (w - 48) / 2 
 	sub $t2, $t2, $t3 # t2 <- (256 - h - l - 32 - 32 - (w-48)/2)
+	#addi $t2, $t2, 32 
 	srl $t2, $t2, 1 # t2 <-  ((256 - h - l - 32 - 32 - (w-48)/2) / 2)
+	add $s6, $t2, $zero
 	li $t6, 0 # Set row index to 0
 drawRow_outer:
 	li $t4, 0 # Set column index to 0
