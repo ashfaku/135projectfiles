@@ -32,7 +32,7 @@ drawRow_outer:
 drawRow_inner:
 	sll $t5, $t4, 2 # Multiplying column by 4
 	add $t7, $t1, $t5 # Adding 4 * col to base address of buffer
-	sw $s3, 0($t7)
+	#sw $s3, 0($t7)
 	addi $t4, $t4, 1 # incrementing column 
 	bne $t4, $s4, drawRow_inner
 	
@@ -49,27 +49,34 @@ drawCap:
 	addi $t2, $s4, -60 # t2 <- 512 - 60
 	srl $t2, $t2, 1 # t2 <- (512 - 60) / 2, width left/right of the cap
 	li $t3, 0 # Set row index to 0
-	li $t4, 0 # Set column index to 0
-	la $s3, 0x0000FF00
+	li $t4, -1 # Set column index to -1
+drawCap_outer:
+	li $t6, 0
 drawCap_inner:
+	addi $t4, $t4, 1 # incrementing column 
+	
 	sll $t5, $t4, 2 # Multiplying column by 4
 	add $t7, $t7, $t5 # Adding 4 * col to current location 
-	sw $s3, 0($t7)
-
-	#slti $t0, $t4, 226 # Set $t0 to 1 if $t4 < 226, 0 otherwise
- 	#beq  $t0, 1, then # Branch to "then" if $t0 != 0
-
+	la $s7, 0x000000FF
+	sw $s7, 0($t7)
+	slti $t0, $t4, 226 # Set $t0 to 1 if $t4 < 226, 0 otherwise
+ 	beq  $t0, 1, then # Branch to "then" if $t0 != 0
+	
+ 	slti $t0, $t4, 286
+ 	
+	#slti $t0, $s4, 286
+	beq $t0, $zero, second_then
 	sub $t7, $t7, $t5
 	
-	addi $t4, $t4, 1 # incrementing column 
 	bne $t4, $s4, drawCap_inner
-#then: 
-#	sw $s3, 0($t7)
-#	sub $t7, $t7, $t5
-#	addi $t4, $t4, 1
-#	beq $t4, 512, end_loop
-#	j drawCap_inner
-
+then: 
+	sw $s3, 0($t7)
+	sub $t7, $t7, $t5
+	bne $t4, $s4, drawCap_inner
+second_then:
+	sw $s3, 0($t7)
+	sub $t7, $t7, $t5
+	bne $t4, $s4, drawCap_inner
 
 end_loop:	
 	li $v0, 10 # exit
