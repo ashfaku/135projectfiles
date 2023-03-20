@@ -44,34 +44,34 @@ drawRow_inner:
 add $t7, $t1, $zero
 
 
-#drawCap:
+drawCap:
 	# (512 - 60) / 2
-#	addi $t2, $s4, -60 # t2 <- 512 - 60
-#	srl $t2, $t2, 1 # t2 <- (512 - 60) / 2, width left/right of the cap
-#	li $t3, 0 # Set row index to 0
-#	li $t4, 0 # Set column index to 0
-#drawCap_inner:
-#	sll $t5, $t4, 2 # Multiplying column by 4
-#	add $t7, $t7, $t5 # Adding 4 * col to current location 
-#	#sw $s3, 0($t7)
-#	slti $t0, $t4, 226 # Set $t0 to 1 if $s0 < 226, 0 otherwise
-#  	bne  $t0, $zero, then     # Branch to "then" if $t0 != 0
-#	sub $t7, $t7, $t5
-#	addi $t4, $t4, 1 # incrementing column 
-#	bne $t4, $s4, drawCap_inner
+	addi $t2, $s4, -60 # t2 <- 512 - 60
+	srl $t2, $t2, 1 # t2 <- (512 - 60) / 2, width left/right of the cap
+	li $t3, 0 # Set row index to 0
+	li $t4, 0 # Set column index to 0
+	la $s3, 0x0000FF00
+drawCap_inner:
+	sll $t5, $t4, 2 # Multiplying column by 4
+	add $t7, $t7, $t5 # Adding 4 * col to current location 
+	sw $s3, 0($t7)
+
+	#slti $t0, $t4, 226 # Set $t0 to 1 if $t4 < 226, 0 otherwise
+ 	#beq  $t0, 1, then # Branch to "then" if $t0 != 0
+
+	sub $t7, $t7, $t5
+	
+	addi $t4, $t4, 1 # incrementing column 
+	bne $t4, $s4, drawCap_inner
 #then: 
 #	sw $s3, 0($t7)
-#add $t7, $t7, $t5
-	#addi $t6, $t6, 1
-	#bne $t6, $t2, drawRow_outer
-li $s3, 0x00FF0000
-sw $s3, 4($t7)
-sw $s3, 8($t7)
-sw $s3, 12($t7)
-sw $s3, 16($t7)
-sw $s3, 20($t7)
-sw $s3, 24($t7)	
-	
-li $v0, 10 # exit
-syscall
+#	sub $t7, $t7, $t5
+#	addi $t4, $t4, 1
+#	beq $t4, 512, end_loop
+#	j drawCap_inner
+
+
+end_loop:	
+	li $v0, 10 # exit
+	syscall
 	
