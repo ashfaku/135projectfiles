@@ -22,10 +22,13 @@ init:
 	sub $t2, $t2, $s2  # t2 <- 256 - h - l
 	addi $t2, $t2, -32  # t2 <- 256 - h - l - 32
 	addi $t2, $t2, -32  # t2 <- 256 - h - l - 32 - 32
-	addi $t3, $s0, -48  # t3 <- w - 48 
-	srl $t3, $t3, 1 # t3 <- (w - 48) / 2 
+	add $t3, $zero, 192
+	sub $t3, $t3, $s1
+	sub $t3, $t3, $s2
+	addi $t3, $t3, -64
+	#addi $t3, $s0, -48  # t3 <- w - 48 
+	#srl $t3, $t3, 1 # t3 <- (w - 48) / 2 
 	sub $t2, $t2, $t3 # t2 <- (256 - h - l - 32 - 32 - (w-48)/2)
-	#addi $t2, $t2, 32 
 	srl $t2, $t2, 1 # t2 <-  ((256 - h - l - 32 - 32 - (w-48)/2) / 2)
 	add $s6, $t2, $zero
 	li $t6, 0 # Set row index to 0
@@ -207,7 +210,7 @@ drawFinalBox:
 drawFinalBox_outer:
 	li $t4, -1 # Set column index to -1
 	slt $t0, $t6, $s2
-	beq $t0, $zero, exit # exit outer loop
+	beq $t0, $zero, drawFinalRows # exit outer loop
 	addi $t7, $t7, 2048
 	
 drawFinalBox_inner:
@@ -233,7 +236,38 @@ finalbox_then:
 	addi $t6, $t6, 1
 	j drawFinalBox_outer
 	
+	
+	
 
+drawFinalRows:
+	li $t6, 0
+drawFinalRows_outer:
+	li $t4, -1 # Set column index to -1
+	slt $t0, $t6, $s6
+	beq $t0, $zero, exit # exit outer loop
+	addi $t7, $t7, 2048
+	
+drawFinalRows_inner:
+	addi $t4, $t4, 1 # incrementing column 
+	
+	sll $t5, $t4, 2 # Multiplying column by 4
+	add $t7, $t7, $t5 # Adding 4 * col to current location 
+	sw $s3, 0($t7)
+	slt $t0, $t4, $t8 # Set $t0 to 1 if $t4 < 226, 0 otherwise
+ 	beq $t0, 1, finalrows_then # Branch to "then" if $t0 != 0
+	
+ 	slt $t0, $t4, $t9
+	beq $t0, $zero, finalrows_then
+	
+	sub $t7, $t7, $t5
+	
+	bne $t4, $s4, drawFinalRows_inner
+finalrows_then: 
+	sw $s3, 0($t7)
+	sub $t7, $t7, $t5
+	bne $t4, $s4, drawFinalRows_inner
+	addi $t6, $t6, 1
+	j drawFinalRows_outer
 exit:
 	li $v0, 10 # exit
 	syscall
