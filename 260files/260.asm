@@ -4,7 +4,7 @@ frameBuffer: .space 0x80000 #512wideX256highpixels
 w: .word 70
 h: .word 20
 l: .word 70
-bgcol: .word 0x00FF00FF
+bgcol: .word 0x00FF0000
 # DONOTMODIFYTHISLINE
 # Your variables go BELOW here only (and above .text)
 .text
@@ -32,7 +32,7 @@ drawRow_outer:
 drawRow_inner:
 	sll $t5, $t4, 2 # Multiplying column by 4
 	add $t7, $t1, $t5 # Adding 4 * col to base address of buffer
-	#sw $s3, 0($t7)
+	sw $s3, 0($t7)
 	addi $t4, $t4, 1 # incrementing column 
 	bne $t4, $s4, drawRow_inner
 	
@@ -41,7 +41,7 @@ drawRow_inner:
 	add $t1, $t1, $t5
 	bne $t6, $t2, drawRow_outer
 
-add $t7, $t1, $zero
+add $t7, $t1, -2048
 
 
 drawCap:
@@ -49,9 +49,13 @@ drawCap:
 	addi $t2, $s4, -60 # t2 <- 512 - 60
 	srl $t2, $t2, 1 # t2 <- (512 - 60) / 2, width left/right of the cap
 	li $t3, 0 # Set row index to 0
-	li $t4, -1 # Set column index to -1
+	
+	li $t6, 0 # Set row index to 0
 drawCap_outer:
-	li $t6, 0
+	li $t4, -1 # Set column index to -1
+	slti $t0, $t6, 32
+	beq $t0, $zero, end_loop
+	addi $t7, $t7, 2048
 drawCap_inner:
 	addi $t4, $t4, 1 # incrementing column 
 	
@@ -63,9 +67,8 @@ drawCap_inner:
  	beq  $t0, 1, then # Branch to "then" if $t0 != 0
 	
  	slti $t0, $t4, 286
- 	
-	#slti $t0, $s4, 286
-	beq $t0, $zero, second_then
+	beq $t0, $zero, then
+	
 	sub $t7, $t7, $t5
 	
 	bne $t4, $s4, drawCap_inner
@@ -73,12 +76,9 @@ then:
 	sw $s3, 0($t7)
 	sub $t7, $t7, $t5
 	bne $t4, $s4, drawCap_inner
-second_then:
-	sw $s3, 0($t7)
-	sub $t7, $t7, $t5
-	bne $t4, $s4, drawCap_inner
-
-end_loop:	
+	addi $t6, $t6, 1
+	j drawCap_outer
+end_loop:
 	li $v0, 10 # exit
 	syscall
 	
